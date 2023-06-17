@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/categories_model.dart';
 import '../services/categories_service.dart';
 import '../utils/custom_drawer.dart';
+import 'category_detail.dart';
 
 class CategoriesScreen extends StatefulWidget {
   CategoriesScreen({super.key});
@@ -25,6 +26,15 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     setState(() => categories = response);
   }
 
+  void navigateToCategoryDetail(String category) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CategoryDetailScreen(category: category),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +49,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 final category = categories![index];
                 return ListTile(
                   title: Text(category.value),
+                  onTap: () => navigateToCategoryDetail(category.value),
                 );
               },
             )
