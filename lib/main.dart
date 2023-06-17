@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'random_joke_screen.dart';
+import 'joke_categories_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => RandomJokeScreen(),
+        '/categories': (context) => CategoriesScreen(),
       },
     );
   }
