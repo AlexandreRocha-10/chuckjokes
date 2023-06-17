@@ -7,16 +7,18 @@ import '../utils/custom_drawer.dart';
 class CategoryDetailScreen extends StatefulWidget {
   final String category;
 
-  const CategoryDetailScreen({required this.category});
+  const CategoryDetailScreen({super.key, required this.category});
 
   @override
-  _CategoryDetailScreenState createState() => _CategoryDetailScreenState();
+  CategoryDetailScreenState createState() => CategoryDetailScreenState();
 }
 
-class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
+class CategoryDetailScreenState extends State<CategoryDetailScreen> {
+  String firstJoke =
+      "Hurricanes are mother nature's way of running from Chuck Norris";
   String imageUrl =
       'https://images01.military.com/sites/default/files/styles/full/public/2021-04/chucknorris.jpeg.jpg?itok=2b4A6n29';
-  RandomJoke? joke;
+  RandomJoke? data;
 
   @override
   void initState() {
@@ -24,9 +26,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     handleGetCategoryJoke();
   }
 
-  void handleGetCategoryJoke() async {
+  Future<void> handleGetCategoryJoke() async {
     final response = await getCategoryJoke(widget.category);
-    setState(() => joke = response);
+    setState(() => data = response);
   }
 
   @override
@@ -36,58 +38,86 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
         title: Text(widget.category),
       ),
       drawer: const MyDrawer(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const SizedBox(height: 50),
-            if (imageUrl.isNotEmpty)
-              Image.network(
+      body: Column(
+        children: [
+          const SizedBox(height: 16),
+          if (imageUrl.isNotEmpty)
+            Opacity(
+              opacity: 0.9,
+              child: Image.network(
                 imageUrl,
+                fit: BoxFit.cover,
               ),
-            const SizedBox(height: 30),
-            if (joke != null)
-              Container(
-                constraints: const BoxConstraints(
-                  minWidth: 200,
-                  minHeight: 100,
-                ),
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
-                ),
-                child: ListTile(
-                  title: Text(
-                    joke!.value,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+            ),
+          const SizedBox(height: 30),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(height: 30),
+                  _buildJokeContainer(),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: handleGetCategoryJoke,
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(16),
+                      shape: const StadiumBorder(),
                     ),
-                    textAlign: TextAlign.center,
-                    softWrap: true,
-                    maxLines: 5,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
+                    child: const Text(
+                      "New Joke!",
+                      style: TextStyle(
+                        fontSize: 16,
+                      ),
+                    ),
+                  )
+                ],
               ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () => handleGetCategoryJoke(),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(16),
-                shape: const StadiumBorder(),
-              ),
-              child: const Text(
-                "New Joke!",
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            )
-          ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildJokeContainer() {
+    return Container(
+      constraints: const BoxConstraints(
+        minWidth: 200,
+        minHeight: 200,
+      ),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey[200],
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 3,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: data != null
+          ? _buildJokeTile(data!.value)
+          : _buildJokeTile(firstJoke),
+    );
+  }
+
+  Widget _buildJokeTile(String jokeText) {
+    return ListTile(
+      title: Text(
+        jokeText,
+        style: const TextStyle(
+          fontSize: 24,
+          fontWeight: FontWeight.bold,
+          color: Colors.black,
         ),
+        textAlign: TextAlign.center,
+        softWrap: true,
+        maxLines: 5,
+        overflow: TextOverflow.ellipsis,
       ),
     );
   }

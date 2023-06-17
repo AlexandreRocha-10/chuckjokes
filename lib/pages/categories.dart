@@ -6,14 +6,33 @@ import '../utils/custom_drawer.dart';
 import 'category_detail.dart';
 
 class CategoriesScreen extends StatefulWidget {
-  CategoriesScreen({super.key});
+  const CategoriesScreen({super.key});
 
   @override
-  _CategoriesScreenState createState() => _CategoriesScreenState();
+  CategoriesScreenState createState() => CategoriesScreenState();
 }
 
-class _CategoriesScreenState extends State<CategoriesScreen> {
+class CategoriesScreenState extends State<CategoriesScreen> {
   List<Categories>? categories;
+
+  final Map<String, IconData> categoryIcons = {
+    'animal': Icons.pets,
+    'career': Icons.work,
+    'celebrity': Icons.star,
+    'dev': Icons.code,
+    'explicit': Icons.warning,
+    'fashion': Icons.shopping_bag,
+    'food': Icons.restaurant,
+    'history': Icons.history,
+    'money': Icons.attach_money,
+    'movie': Icons.movie,
+    'music': Icons.music_note,
+    'political': Icons.gavel,
+    'religion': Icons.mood,
+    'science': Icons.science,
+    'sport': Icons.sports,
+    'travel': Icons.flight,
+  };
 
   @override
   void initState() {
@@ -47,7 +66,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               itemCount: categories!.length,
               itemBuilder: (context, index) {
                 final category = categories![index];
+                final iconData = categoryIcons[category.value];
                 return ListTile(
+                  leading: Icon(iconData),
                   title: Text(category.value),
                   onTap: () => navigateToCategoryDetail(category.value),
                 );

@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const RandomJokeScreen(),
-        '/categories': (context) => CategoriesScreen(),
+        '/categories': (context) => const CategoriesScreen(),
       },
     );
   }

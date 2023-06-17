@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
 import '../models/random_joke_model.dart';
 
 Future<RandomJoke> getRandomJoke() async {
